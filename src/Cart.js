@@ -1,5 +1,6 @@
 import React from "react";
 import CartItem from "./CartItem";
+import Navbar  from "./Navbar";
 
 class Cart extends React.Component{
 
@@ -64,6 +65,8 @@ class Cart extends React.Component{
     render(){
         const {products} = this.state;
         return(
+            <div>
+            <Navbar />
             <div className="cart">
                 {products.map((product)=>{
                     return <CartItem 
@@ -74,6 +77,7 @@ class Cart extends React.Component{
                             onDeleteItem = {this.handleDeleteItem}
                         />;
                 })}
+            </div>
             </div>
         );
     };
