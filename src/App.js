@@ -71,6 +71,15 @@ getCount = () =>{
     return count;
 }
 
+getCartTotal = () => {
+    const {products} = this.state;
+    let cartTotal = 0;
+    products.forEach((product) =>{
+      cartTotal += (product.Qty * product.price);
+    })
+    return cartTotal;
+}
+
   render(){
   const {products} = this.state;
   return (
@@ -82,6 +91,7 @@ getCount = () =>{
        onDecreaseQuantity = {this.handleDecreaseQuantity}
        onDeleteItem = {this.handleDeleteItem}
        />
+       <div style = {{fontSize : 20, padding : 10}}>TOTAL : {this.getCartTotal()}</div>
     </div>
   );
   }
