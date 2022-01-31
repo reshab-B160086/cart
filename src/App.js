@@ -1,36 +1,64 @@
 import React from "react";
 import Cart from "./Cart";
 import Navbar  from "./Navbar";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 
 class App extends React.Component {
   constructor(){
     super();
     this.state = {
-      products :[
-          {
-            price : 999,
-            title: 'Mobile Phone',
-            Qty : 100,
-            img : 'https://cdn-icons.flaticon.com/png/128/2586/premium/2586488.png?token=exp=1643610423~hmac=7b28df8e0449dd792b4b313091cb8c0b',
-            id : 1
-          },
-          {
-            price : 2599,
-            title: 'Watch',
-            Qty : 8,
-            img : 'https://t3.ftcdn.net/jpg/03/01/52/70/240_F_301527093_MsrLRU3oL6lGoF5OCBNGugZ1M4MkZzXm.jpg',
-            id : 2
-          },
-          {
-            price : 99,
-            title: 'Laptop',
-            Qty : 4,
-            img : 'https://cdn-icons-png.flaticon.com/128/428/428001.png',
-            id : 3
-          },
-      ]
+      products :[],
+      loading : true
     }
+}
+
+componentDidMount(){
+  // firebase
+  //   .firestore()
+  //   .collection('products')
+  //   .get()
+  //   .then((snapshot) =>{
+  //       console.log("snaphot", snapshot);
+  //       snapshot.docs.map((doc) =>{
+  //           console.log(doc.data())
+  //       });
+
+  //       const products = snapshot.docs.map((doc) =>{
+  //         const data = doc.data();
+  //         data["id"] = doc.id;
+  //         return data;
+  //       })
+
+  //       this.setState({
+  //         products,
+  //         loading : false
+  //       })
+  //   });
+  firebase
+  .firestore()
+  .collection('products')
+  .onSnapshot((snapshot) =>{
+    console.log("snaphot", snapshot);
+    snapshot.docs.map((doc) =>{
+        console.log(doc.data())
+    });
+
+    const products = snapshot.docs.map((doc) =>{
+      const data = doc.data();
+      data["id"] = doc.id;
+      return data;
+    })
+
+    this.setState({
+      products,
+      loading : false
+    })
+})
+
+    
 }
 
 handleIncreaseQuantity = (product) =>{
@@ -81,7 +109,7 @@ getCartTotal = () => {
 }
 
   render(){
-  const {products} = this.state;
+  const {products, loading} = this.state;
   return (
     <div className="App">
       <Navbar count = {this.getCount()}/>
@@ -91,6 +119,7 @@ getCartTotal = () => {
        onDecreaseQuantity = {this.handleDecreaseQuantity}
        onDeleteItem = {this.handleDeleteItem}
        />
+       {loading && <h1>Loading Proucts ...</h1>}
        <div style = {{fontSize : 20, padding : 10}}>TOTAL : {this.getCartTotal()}</div>
     </div>
   );
