@@ -109,11 +109,22 @@ handleDecreaseQuantity = (product) =>{
 
 handleDeleteItem = (id) =>{
     const {products} = this.state;
-    const items = products.filter((product)=> product.id !== id);
+    // const items = products.filter((product)=> product.id !== id);
 
-    this.setState({
-        products : items
+    // this.setState({
+    //     products : items
+    // })
+    const docRef = this.db.collection("products").doc(id);
+
+    docRef
+    .delete()
+    .then(() =>{
+      console.log("Updated Successfully")
     })
+    .catch((error) =>{
+      console.log("Error in decreaseQuantity");
+    })
+
 }
 
 getCount = () =>{
