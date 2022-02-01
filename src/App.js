@@ -4,6 +4,7 @@ import Navbar  from "./Navbar";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { doc } from "@firebase/firestore";
 
 
 class App extends React.Component {
@@ -64,20 +65,45 @@ componentDidMount(){
 handleIncreaseQuantity = (product) =>{
     //console.log("Quantity is increased for product ", product);
     const {products} = this.state;
-    const index = products.indexOf(product);
-    products[index].Qty += 1;
-    this.setState({
-        products : products
+    //const index = products.indexOf(product);
+    // products[index].Qty += 1;
+    // this.setState({
+    //     products : products
+    // })
+
+    const docRef = this.db.collection("products").doc(product.id);
+
+    docRef.update({
+      Qty : product.Qty + 1
     })
+    .then(() =>{
+      console.log("Updated Successfully")
+    })
+    .catch((error) =>{
+      console.log("Error in increaseQuantity")
+    })
+
 }
 handleDecreaseQuantity = (product) =>{
     //console.log("Quantity is increased for product ", product);
     const {products} = this.state;
     const index = products.indexOf(product);
     if(products[index].Qty == 0) return;
-    products[index].Qty -= 1;
-    this.setState({
-        products : products
+    // products[index].Qty -= 1;
+    // this.setState({
+    //     products : products
+    // })
+
+    const docRef = this.db.collection("products").doc(product.id);
+
+    docRef.update({
+      Qty : product.Qty - 1
+    })
+    .then(() =>{
+      console.log("Updated Successfully")
+    })
+    .catch((error) =>{
+      console.log("Error in decreaseQuantity");
     })
 }
 
